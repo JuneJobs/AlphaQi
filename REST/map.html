@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Circles</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 85%;
+      }
+      #chart {
+        height: 15%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <div id="chart_div"></div>
+
+    <script>
+var map;
+var cityCircle;
+// This example creates circles on the map, representing populations in North
+// America.
+
+// First, create an object containing LatLng and population for each city.
+var parkingData;
+
+parkingData =   [{
+    "totalQty": "11",
+    "locationUid": "LOCATION-297",
+    "midCoordinates": "32.714605,-117.158063",
+    "type": "public",
+    "lastupdatedTime": "1498121120930",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.714591,-117.158213:32.714620,-117.158213:32.714620,-117.157914:32.714591,-117.157914",
+    "locationTitle": "streetPark7",
+    "availableQty": "2",
+    "predictQty": "0.18",
+    "price": "FREE"
+},
+{
+    "totalQty": "8",
+    "locationUid": "LOCATION-323",
+    "midCoordinates": "32.714932,-117.156462",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.714790,-117.156444:32.714790,-117.156480:32.715074,-117.156480:32.715074,-117.156444",
+    "locationTitle": "streetPark3",
+    "availableQty": "1",
+    "predictQty": "0.125",
+    "price": "$$"
+},
+{
+    "totalQty": "13",
+    "locationUid": "LOCATION-213",
+    "midCoordinates": "32.713568,-117.158771",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713584,-117.158617:32.713554,-117.158618:32.713551,-117.158923:32.713583,-117.158924",
+    "locationTitle": "streetPark29",
+    "availableQty": "7",
+    "predictQty": "0.54",
+    "price": "$"
+},
+{
+    "totalQty": "9",
+    "locationUid": "LOCATION-189",
+    "midCoordinates": "32.712524,-117.158753",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.712538,-117.158612:32.712511,-117.158612:32.712509,-117.158894:32.712538,-117.158893",
+    "locationTitle": "streetPark15",
+    "availableQty": "7",
+    "predictQty": "0.78",
+    "price": "$$"
+},
+{
+    "totalQty": "14",
+    "locationUid": "LOCATION-160",
+    "midCoordinates": "32.711798,-117.156437",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.711948,-117.156453:32.711948,-117.156421:32.711648,-117.156421:32.711648,-117.156453",
+    "locationTitle": "streetPark18",
+    "availableQty": "13",
+    "predictQty": "0.93",
+    "price": "$$"
+},
+{
+    "totalQty": "4",
+    "locationUid": "LOCATION-229",
+    "midCoordinates": "32.713414,-117.158403",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713517,-117.158418:32.713517,-117.158388:32.713310,-117.158387:32.713310,-117.158420",
+    "locationTitle": "streetPark31",
+    "availableQty": "1",
+    "predictQty": "0.25",
+    "price": "FREE"
+},
+{
+    "totalQty": "6",
+    "locationUid": "LOCATION-115",
+    "midCoordinates": "32.711594,-117.157858",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.711610,-117.158228:32.711610,-117.157487:32.711578,-117.157487:32.711578,-117.158228",
+    "locationTitle": "streetPark21",
+    "availableQty": "5",
+    "predictQty": "0.83",
+    "price": "$$"
+},
+{
+    "totalQty": "12",
+    "locationUid": "LOCATION-150",
+    "midCoordinates": "32.712836,-117.157357",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.712691,-117.157339:32.712691,-117.157375:32.712981,-117.157375:32.712981,-117.157339",
+    "locationTitle": "streetPark19",
+    "availableQty": "2",
+    "predictQty": "0.17",
+    "price": "FREE"
+},
+{
+    "totalQty": "17",
+    "locationUid": "LOCATION-290",
+    "midCoordinates": "32.713893,-117.156460",
+    "type": "public",
+    "lastupdatedTime": "1498121124925",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713777,-117.156438:32.713777,-117.156482:32.714009,-117.156482:32.714009,-117.156438",
+    "locationTitle": "streetPark8",
+    "availableQty": "10",
+    "predictQty": "0.59",
+    "price": "$"
+},
+{
+    "totalQty": "5",
+    "locationUid": "LOCATION-325",
+    "midCoordinates": "32.714969,-117.157361",
+    "type": "public",
+    "lastupdatedTime": "1498121124931",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.714794,-117.157339:32.714794,-117.157381:32.715145,-117.157381:32.715145,-117.157342",
+    "locationTitle": "streetPark1",
+    "availableQty": "5",
+    "predictQty": "1",
+    "price": "FREE"
+},
+{
+    "totalQty": "12",
+    "locationUid": "LOCATION-281",
+    "midCoordinates": "32.713577,-117.157682",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713591,-117.157555:32.713562,-117.157555:32.713562,-117.157809:32.713591,-117.157809",
+    "locationTitle": "streetPark24",
+    "availableQty": "3",
+    "predictQty": "0.25",
+    "price": "$$"
+},
+{
+    "totalQty": "10",
+    "locationUid": "LOCATION-215",
+    "midCoordinates": "32.714881,-117.158273",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.714767,-117.158255:32.714766,-117.158289:32.714995,-117.158290:32.714996,-117.158258",
+    "locationTitle": "streetPark11",
+    "availableQty": "6",
+    "predictQty": "0.6",
+    "price": "$"
+},
+{
+    "totalQty": "11",
+    "locationUid": "LOCATION-233",
+    "midCoordinates": "32.713574,-117.158492",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713593,-117.158362:32.713557,-117.158362:32.713556,-117.158621:32.713591,-117.158621",
+    "locationTitle": "streetPark30",
+    "availableQty": "7",
+    "predictQty": "0.64",
+    "price": "$$"
+},
+{
+    "totalQty": "9",
+    "locationUid": "LOCATION-188",
+    "midCoordinates": "32.712525,-117.159008",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.712540,-117.158896:32.712509,-117.158897:32.712509,-117.159119:32.712540,-117.159119",
+    "locationTitle": "streetPark16",
+    "availableQty": "5",
+    "predictQty": "0.56",
+    "price": "FREE"
+},
+{
+    "totalQty": "7",
+    "locationUid": "LOCATION-212",
+    "midCoordinates": "32.713566,-117.159029",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713582,-117.158927:32.713551,-117.158925:32.713551,-117.159131:32.713582,-117.159133",
+    "locationTitle": "streetPark28",
+    "availableQty": "3",
+    "predictQty": "0.43",
+    "price": "FREE"
+},
+{
+    "totalQty": "14",
+    "locationUid": "LOCATION-282",
+    "midCoordinates": "32.713434,-117.157503",
+    "type": "public",
+    "lastupdatedTime": "1498121122926",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713347,-117.157485:32.713347,-117.157521:32.713521,-117.157521:32.713521,-117.157485",
+    "locationTitle": "streetPark23",
+    "availableQty": "11",
+    "predictQty": "0.79",
+    "price": "$"
+},
+{
+    "totalQty": "4",
+    "locationUid": "LOCATION-313",
+    "midCoordinates": "32.714739,-117.157728",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.714724,-117.157559:32.714724,-117.157897:32.714754,-117.157897:32.714754,-117.157559",
+    "locationTitle": "streetPark4",
+    "availableQty": "4",
+    "predictQty": "1",
+    "price": "FREE"
+},
+{
+    "totalQty": "7",
+    "locationUid": "LOCATION-220",
+    "midCoordinates": "32.713391,-117.159317",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713527,-117.159336:32.713528,-117.159300:32.713254,-117.159298:32.713254,-117.159334",
+    "locationTitle": "streetPark10",
+    "availableQty": "1",
+    "predictQty": "0.14",
+    "price": "FREE"
+},
+{
+    "totalQty": "13",
+    "locationUid": "LOCATION-190",
+    "midCoordinates": "32.712533,-117.157192",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.712547,-117.157322:32.712548,-117.157063:32.712519,-117.157062:32.712518,-117.157321",
+    "locationTitle": "streetPark14",
+    "availableQty": "4",
+    "predictQty": "0.38",
+    "price": "$"
+},
+{
+    "totalQty": "3",
+    "locationUid": "LOCATION-225",
+    "midCoordinates": "32.713831,-117.158265",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713931,-117.158280:32.713931,-117.158251:32.713732,-117.158251:32.713731,-117.158280",
+    "locationTitle": "streetPark32",
+    "availableQty": "3",
+    "predictQty": "1",
+    "price": "$"
+},
+{
+    "totalQty": "12",
+    "locationUid": "LOCATION-198",
+    "midCoordinates": "32.712369,-117.157483",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.712486,-117.157504:32.712486,-117.157464:32.712253,-117.157463:32.712252,-117.157502",
+    "locationTitle": "streetPark13",
+    "availableQty": "3",
+    "predictQty": "0.25",
+    "price": "FREE"
+},
+{
+    "totalQty": "10",
+    "locationUid": "LOCATION-324",
+    "midCoordinates": "32.713699,-117.156724",
+    "type": "public",
+    "lastupdatedTime": "1498121120927",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713713,-117.156808:32.713713,-117.156640:32.713686,-117.156640:32.713686,-117.156808",
+    "locationTitle": "streetPark2",
+    "availableQty": "6",
+    "predictQty": "0.6",
+    "price": "$"
+},
+{
+    "totalQty": "4",
+    "locationUid": "LOCATION-114",
+    "midCoordinates": "32.711588,-117.158617",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.711602,-117.158777:32.711602,-117.158457:32.711574,-117.158457:32.711574,-117.158777",
+    "locationTitle": "streetPark22",
+    "availableQty": "4",
+    "predictQty": "1",
+    "price": "FREE"
+},
+{
+    "totalQty": "12",
+    "locationUid": "LOCATION-140",
+    "midCoordinates": "32.712389,-117.158403",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.712493,-117.158387:32.712286,-117.158387:32.712286,-117.158419:32.712493,-117.158419",
+    "locationTitle": "streetPark20",
+    "availableQty": "10",
+    "predictQty": "0.83",
+    "price": "$"
+},
+{
+    "totalQty": "1",
+    "locationUid": "LOCATION-276",
+    "midCoordinates": "32.713692,-117.157701",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713706,-117.157557:32.713677,-117.157557:32.713677,-117.157845:32.713706,-117.157845",
+    "locationTitle": "streetPark25",
+    "availableQty": "0",
+    "predictQty": "0.4",
+    "price": "FREE"
+},
+{
+    "totalQty": "10",
+    "locationUid": "LOCATION-236",
+    "midCoordinates": "32.712525,-117.158158",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.712538,-117.158099:32.712514,-117.158098:32.712511,-117.158217:32.712538,-117.158219",
+    "locationTitle": "streetPark9",
+    "availableQty": "4",
+    "predictQty": "0.4",
+    "price": "$$"
+},
+{
+    "totalQty": "8",
+    "locationUid": "LOCATION-184",
+    "midCoordinates": "32.712646,-117.157671",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.712661,-117.157826:32.712661,-117.157516:32.712630,-117.157516:32.712630,-117.157826",
+    "locationTitle": "streetPark17",
+    "availableQty": "8",
+    "predictQty": "1",
+    "price": "$"
+},
+{
+    "totalQty": "7",
+    "locationUid": "LOCATION-273",
+    "midCoordinates": "32.713691,-117.158032",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713704,-117.157852:32.713677,-117.157852:32.713677,-117.158213:32.713704,-117.158213",
+    "locationTitle": "streetPark26",
+    "availableQty": "2",
+    "predictQty": "0.29",
+    "price": "$"
+},
+{
+    "totalQty": "6",
+    "locationUid": "LOCATION-306",
+    "midCoordinates": "32.712527,-117.157832",
+    "type": "public",
+    "lastupdatedTime": "1498121110933",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.712544,-117.157507:32.712513,-117.157507:32.712509,-117.158157:32.712541,-117.158157",
+    "locationTitle": "streetPark6",
+    "availableQty": "1",
+    "predictQty": "0.17",
+    "price": "$$"
+},
+{
+    "totalQty": "5",
+    "locationUid": "LOCATION-272",
+    "midCoordinates": "32.713576,-117.158046",
+    "type": "public",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713589,-117.157882:32.713562,-117.157882:32.713562,-117.158210:32.713589,-117.158210",
+    "locationTitle": "streetPark27",
+    "availableQty": "2",
+    "predictQty": "0.4",
+    "price": "$$"
+},
+{
+    "totalQty": "4",
+    "locationUid": "LOCATION-201",
+    "midCoordinates": "32.713698,-117.157079",
+    "type": "public","availableQty": "2",
+    "lastupdatedTime": "0",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.713683,-117.157302:32.713713,-117.157302:32.713713,-117.156856:32.713683,-117.156856",
+    "locationTitle": "streetPark12",
+    "availableQty": "1",
+    "predictQty": "0.25",
+    "price": "$$"
+},
+{
+    "totalQty": "5",
+    "locationUid": "LOCATION-307",
+    "midCoordinates": "32.715500,-117.157519",
+    "type": "public",
+    "lastupdatedTime": "1498121100931",
+    "availableStartTime": "0",
+    "availableEndTime": "0",
+    "coordinates": "32.715409,-117.157502:32.715409,-117.157536:32.715592,-117.157536:32.715592,-117.157502",
+    "locationTitle": "streetPark5",
+    "availableQty": "2",
+    "predictQty": "0.4",
+    "price": "$"
+}];
+var http = new XMLHttpRequest();
+var url = "/getAllZoneInfo";
+http.open('POST', url, true);
+http.setRequestHeader("content-type","application/x-www-form-urlencoded");
+http.onreadystatechange = function() {
+ if(http.readyState == 4 && http.status == 200) {
+     console.log(http);
+     parkingDataFromServer = JSON.parse(http.response);
+     for(var i in parkingDataFromServer) {
+       if(parkingDataFromServer[i].locationUid == "QUALCOMM_INSTITUTE") {
+         parkingData.push(parkingDataFromServer[i]);
+         initMap();
+       }
+     }
+ }
+}
+http.send();
+function initMap() {
+  // Create the map.
+    map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 18,
+    center: {"lat": 32.713434, "lng": -117.157503},
+    mapTypeId: google.maps.MapTypeId.SATELLITE
+  });
+
+   var parkingZone = new Array();
+//
+for(var i = 0; i < parkingData.length; i++){
+
+  drawPolygon(parkingData[i]);
+
+  for (var parking in parkingData[i]) {
+    createMarker(parkingData[i]);
+    }
+  }
+
+function createMarker(parkingData){
+
+  var gpsData = parkingData.coordinates.split(":");
+  var centerData = gpsData[0].split(",");
+
+  var contentString = '<div id="content">'+
+     '<div id="siteNotice">'+
+     '</div>'+
+     '<h1 id="firstHeading" class="firstHeading">'+parkingData.locationUid+'</h1>'+
+     '<div id="bodyContent">'+'<p><b> Available Quantity: '+parkingData.availableQty+'</p><p> Total Quantity: '+
+     parkingData.totalQty+'</p> <p> Available Rate: '+ parkingData.predictQty+'</p>'+
+     '<p>'+'type: '+parkingData.type+', Location Title: '+parkingData.locationTitle+
+     ' </p> <p> Available Start Time : ' +
+     parkingData.availableStartTime+'</p> <p> Available End Time: '+
+     parkingData.availableEndTime+'</p> <p> Last Update Time: '+
+     parkingData.lastupdatedTime+'</p> <p> Price : '+parkingData.price+'</p> <p> Predict Quantity after 10 minutes: '+
+     parkingData.predictQty+
+     '</div>'+
+     '</div>';
+
+  var infowindow = new google.maps.InfoWindow({
+        // content: JSON.stringify(parkingData),
+        content: contentString,
+        maxWidth: 300
+      });
+
+  var marker = new google.maps.Marker({
+    position: {"lat": parseFloat(centerData[0]), "lng": parseFloat(centerData[1])},
+    map: map,
+    clickable: true,
+    label: parkingData.availableQty+"/"+parkingData.totalQty,
+  });
+
+  marker.addListener('click', function() {
+   infowindow.open(map, marker);
+   console.log(parkingData);
+   drawChart(parkingData);
+  //
+  //  var v = setInterval(function(){
+  //    var newAvailableQty = Math.random()*(15-0+1)+0;
+  //      var d = new Date();
+  //      var n = d.getTime();
+  //
+  //    updateChart();
+  //  },2000);
+ });
+  }
+
+function drawPolygon(parkingData){
+  var point = parkingData.coordinates.split(":");
+  var latLngPoint0 = point[0].split(",");
+  var latLngPoint1 = point[1].split(",");
+  var latLngPoint2 = point[2].split(",");
+  var latLngPoint3 = point[3].split(",");
+  var parkingZone = [
+    {lat: parseFloat(latLngPoint0[0]), lng: parseFloat(latLngPoint0[1])},
+    {lat: parseFloat(latLngPoint1[0]), lng: parseFloat(latLngPoint1[1])},
+    {lat: parseFloat(latLngPoint2[0]), lng: parseFloat(latLngPoint2[1])},
+    {lat: parseFloat(latLngPoint3[0]), lng: parseFloat(latLngPoint3[1])}
+  ];
+  // parkingZone = parkingzone;
+
+  var probablity = parkingData.predictQty;
+  var color;
+  if(probablity <0.33){
+    color = "#E53935";
+  }
+  else if(probablity >=0.33 && probablity <0.67){
+    color = "#FFB300";
+  }
+  else {
+    color = "#51C256";
+  }
+
+  // Construct the polygon.
+  var settingParkingZone = new google.maps.Polygon({
+  paths: parkingZone,
+  strokeColor: color,
+  strokeOpacity: 0.8,
+  strokeWeight: 3,
+  fillColor: color,
+  fillOpacity: 0.6
+  });
+
+  settingParkingZone.setMap(map);
+}
+
+function parseCoordinates(gpsData){
+
+  for(var i = 0; i < gpsData.length; i++){
+
+    var point = gpsData[i].coordinates.split(":");
+    var latLngPoint0 = point[0].split(",");
+    var latLngPoint1 = point[1].split(",");
+    var latLngPoint2 = point[2].split(",");
+    var latLngPoint3 = point[3].split(",");
+
+    parkingZone[i] = [
+      {"lat": parseFloat(latLngPoint0[0]), "lng": parseFloat(latLngPoint0[1])},
+      {"lat": parseFloat(latLngPoint1[0]), "lng": parseFloat(latLngPoint1[1])},
+      {"lat": parseFloat(latLngPoint2[0]), "lng": parseFloat(latLngPoint2[1])},
+      {"lat": parseFloat(latLngPoint3[0]), "lng": parseFloat(latLngPoint3[1])}
+    ];
+    }
+  }
+
+  // function to update the chart with new data.
+      function updateChart() {
+
+          dataTable = new google.visualization.DataTable();
+          var date = new Date();
+          var i = date.getTime();
+
+          var newData = [
+            [i,Math.random()*(20-0+1)+0 ],
+            [i+1000,Math.random()*(20-0+1)+0 ]
+          ];
+
+          var options = {
+            hAxis: {
+              title: 'Time',
+              minValue: 0
+            },
+            vAxis: {
+              title: 'Available Quantity'
+              // minValue: 0
+            },
+            colors: ['#AB0D06', '#007329'],
+            trendlines: {
+              0: {type: 'exponential', color: '#333', opacity: 1},
+              1: {type: 'linear', color: '#111', opacity: .3}
+            }
+          };
+
+          dataTable.addRow(newData[0]);
+
+          // redraw the chart.
+          chart.draw(dataTable, options);
+      }
+
+     google.charts.load('current', {'packages':['corechart']});
+     google.charts.setOnLoadCallback(drawChart);
+
+     function drawChart(parkingData) {
+       var data = google.visualization.arrayToDataTable([
+         [0,3],
+         [10,5]
+       ]);
+
+       var options = {
+         title: 'Company Performance',
+         curveType: 'function',
+         legend: { position: 'bottom' }
+       };
+
+       var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+       chart.draw(data, options);
+     }
+}
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDr72zOW_eIUzKLBrfDX8pY_tmcfEMHlrI&callback=initMap"></script>
+  </body>
+</html>
