@@ -14,8 +14,6 @@ var request = require('request');
 global.express = require("express");
 global.bodyParser = require('body-parser');
 global.flow = require('flow-maintained');
-global.app = express();
-global.router = express.Router(); //라우터 객체 생성
 global.path = __dirname;
 var allowCORS = function(req, res, next) {
   res.header('Acess-Control-Allow-Origin', '*');
@@ -30,18 +28,12 @@ global.redis_client = redis.createClient();
 // 이 부분은 app.use(router) 전에 추가하도록 하자
 app.use(allowCORS);
 
-app.enable('trust proxy');
-app.use(requireHttps());
 
-router.use(function (req,res,next) { //page routiong
+router.use(function (req, res, next) { //page routiong
   console.log("client Request : " + req.method);
   next();
 });
 
-//index page
-router.get("/map",function(req,res){
-    res.sendFile(path + '/map.html');
-});
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies\
 app.use("/",router);
@@ -50,6 +42,16 @@ require('./controller/common.js'); //공통 데이터베이스 쿼리
 app.listen(_webPort, function(){
   console.log("Server Running ..");
 });
+
+
+app.enable('trust proxy');
+app.use(requireHttps());
+//index page
+router.get("/map", function (req, res) {
+  res.sendFile(path + '/map.html');
+});
+
+
 //잠깐정지
 getGEparikingZoneInfo()
 
