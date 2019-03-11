@@ -7,7 +7,7 @@
 var _webPort = 8002;
 global.value = [];
 const curl = require('curl');
-
+var requireHttps = require('require-https');
 var ml = require('machine_learning');
 global.redis = require('redis');
 var request = require('request');
@@ -29,6 +29,9 @@ global.redis_client = redis.createClient();
 
 // 이 부분은 app.use(router) 전에 추가하도록 하자
 app.use(allowCORS);
+
+app.enable('trust proxy');
+app.use(requireHttps());
 
 router.use(function (req,res,next) { //page routiong
   console.log("client Request : " + req.method);
