@@ -14,6 +14,8 @@ var request = require('request');
 global.express = require("express");
 global.bodyParser = require('body-parser');
 global.flow = require('flow-maintained');
+global.app = express();
+global.router = express.Router(); //라우터 객체 생성
 global.path = __dirname;
 var allowCORS = function(req, res, next) {
   res.header('Acess-Control-Allow-Origin', '*');
@@ -27,8 +29,6 @@ global.redis_client = redis.createClient();
 
 // 이 부분은 app.use(router) 전에 추가하도록 하자
 app.use(allowCORS);
-
-
 router.use(function (req, res, next) { //page routiong
   console.log("client Request : " + req.method);
   next();
@@ -46,11 +46,11 @@ app.listen(_webPort, function(){
 
 app.enable('trust proxy');
 app.use(requireHttps());
+
 //index page
 router.get("/map", function (req, res) {
   res.sendFile(path + '/map.html');
 });
-
 
 //잠깐정지
 getGEparikingZoneInfo()
