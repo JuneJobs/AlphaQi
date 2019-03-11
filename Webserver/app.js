@@ -4,7 +4,7 @@
   supervisor : SEOKHEON CHO, Qualcomm institute princeple network architect
   title : Web server for Smart Cities Social Parking Service.
 */
-var _webPort = 3000;
+var _webPort = 8002;
 global.value = [];
 const curl = require('curl');
 
